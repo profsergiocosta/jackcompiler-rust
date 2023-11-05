@@ -1,3 +1,10 @@
+mod ast ;
+
+use ast::lexer::Token;
+use ast::lexer::TokenKind;
+
 fn main() {
-    println!("Hello, world!");
+
+    let x = Token{kind: TokenKind::Plus};
+    println!("Hello, world! ");
 }

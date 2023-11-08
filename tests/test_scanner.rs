@@ -15,4 +15,15 @@ fn test_integer_scan() {
 }
 
 
+#[test]
+fn teste_identifier() {
+    let mut scan = Scanner::new("variavel".to_string());
+    let tk = scan.next_token();
+    println! ("{}", tk);
+    assert_eq!(tk.to_string(),"<identifier>variavel</identifier>");
+}
+
+
+
+
 

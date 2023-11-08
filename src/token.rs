@@ -1,6 +1,5 @@
 
 
-
 use core::fmt;
 
 
@@ -86,6 +85,7 @@ pub enum Token {
     IntegerLiteral(u16),
     StringLiteral (String),
     Identifier (String),
+    TkEOF,
 }
 
 impl fmt::Display for Token {
@@ -100,6 +100,7 @@ impl fmt::Display for Token {
             Token::Identifier(i) => write!(f,"<identifier>{}</identifier>",i),
             Token::StringLiteral(i) => write!(f,"<stringConstant>{}</stringConstant>",i),
             Token::Symbol(s) => write!(f,"<stringConstant>{}</stringConstant>",symbol2char(s)),
+            Token::TkEOF =>  write!(f,""),
         }
         
     }

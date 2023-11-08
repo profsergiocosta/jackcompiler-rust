@@ -30,24 +30,21 @@ pub enum Keyword {
 }
 
 pub enum Symbol {
-    LBrace,
-    RBrace,
-    LParen,
-    RParen,
-    LBracket,
-    RBracket,
+    LeftCurlyBraces,
+    RightCurlyBraces,
+    LeftParenthesis,
+    RightParenthesis,
+    LeftSquareBrackets,
+    RightSquareBrackets,
     Dot,
     Comma,
     Semicolon,
-    
     Plus,
     Minus,
     Asterisk,
     Slash,
-    
     Ampersand,
     VerticalBar,
-
     LessThan,
     GreaterThan,
     Equal,
@@ -56,12 +53,12 @@ pub enum Symbol {
 
 fn symbol2char (s: &Symbol) -> char {
     match s {
-        Symbol::LBrace => '{',
-        Symbol::RBrace => '}',
-        Symbol::LParen => '(',
-        Symbol::RParen => ')',
-        Symbol::LBracket => '[',
-        Symbol::RBracket => ']',
+        Symbol::LeftCurlyBraces => '{',
+        Symbol::RightCurlyBraces => '}',
+        Symbol::LeftParenthesis => '(',
+        Symbol::RightParenthesis => ')',
+        Symbol::LeftSquareBrackets => '[',
+        Symbol::RightSquareBrackets => ']',
         Symbol::Dot => '.',
         Symbol::Comma => ',',
         Symbol::Semicolon => ';',
@@ -104,14 +101,14 @@ impl fmt::Display for TokenType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             TokenType::Keyword(k) => {
-                let s = format!("<keyword>{:?}</keyword>",k).to_lowercase();
+                let s = format!("<keyword> {:?} </keyword>",k).to_lowercase();
                 return write!(f,"{}",s);
 
             },
-            TokenType::IntegerLiteral(i) => write!(f,"<integerConstant>{}</integerConstant>",i),
-            TokenType::Identifier(i) => write!(f,"<identifier>{}</identifier>",i),
-            TokenType::StringLiteral(i) => write!(f,"<stringConstant>{}</stringConstant>",i),
-            TokenType::Symbol(s) => write!(f,"<stringConstant>{}</stringConstant>",symbol2char(s)),
+            TokenType::IntegerLiteral(i) => write!(f,"<integerConstant> {} </integerConstant>",i),
+            TokenType::Identifier(i) => write!(f,"<identifier> {} </identifier>",i),
+            TokenType::StringLiteral(i) => write!(f,"<stringConstant> {} </stringConstant>",i),
+            TokenType::Symbol(s) => write!(f,"<symbol> {} </symbol>",symbol2char(s)),
             TokenType::TkEOF =>  write!(f,""),
         }
         

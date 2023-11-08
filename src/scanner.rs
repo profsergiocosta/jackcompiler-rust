@@ -34,11 +34,35 @@ impl Scanner {
                 return Ok(self.scan_identifier_or_keyword());
             }
 
+            if character == '"' {
+                self.index += 1;
+                self.column += 1;
+                return Ok(self.scan_string_literal());
+            }
+
+            return Ok (self.scan_symbol());
 
         }
         return Err("End of file".to_string());
     }
 
+
+    fn scan_string_literal(&mut self) -> Token {
+        let length = self.source.chars().count();
+        let mut buffer = String::new();
+        let mut character = self.current_char();
+
+        while character != '"' && self.index < length {
+            buffer.push(character);
+            self.index += 1;
+            self.column += 1;
+            character = self.current_char();
+        }
+
+        self.index += 1;
+        
+        return Token::new (TokenType::StringLiteral(buffer),self.line)
+    }
 
     fn scan_integer_literal(&mut self) -> Token {
         let length = self.source.chars().count();
@@ -95,7 +119,41 @@ impl Scanner {
             _ => TokenType::Identifier(buffer),
         };
 
-        return Token::new(tk_type, 0);
+        return Token::new(tk_type, self.line);
+    }
+
+    fn scan_symbol(&mut self) -> Token {
+        let character = self.current_char();
+        self.index += 1;
+        self.column += 1;
+
+        let tk_type = match character {
+            '{' => TokenType::Symbol(Symbol::LeftCurlyBraces),
+            '}' => TokenType::Symbol(Symbol::RightCurlyBraces),
+            '(' => TokenType::Symbol(Symbol::LeftParenthesis),
+            ')' => TokenType::Symbol(Symbol::RightParenthesis),
+            '[' => TokenType::Symbol(Symbol::LeftSquareBrackets),
+            ']' => TokenType::Symbol(Symbol::RightSquareBrackets),
+            '.' => TokenType::Symbol(Symbol::Dot),
+            ',' => TokenType::Symbol(Symbol::Comma),
+            ';' => TokenType::Symbol(Symbol::Semicolon),
+            '+' => TokenType::Symbol(Symbol::Plus),
+            '-' => TokenType::Symbol(Symbol::Minus),
+            '*' => TokenType::Symbol(Symbol::Asterisk),
+            '/' => TokenType::Symbol(Symbol::Slash),
+            '&' => TokenType::Symbol(Symbol::Ampersand),
+            '|' => TokenType::Symbol(Symbol::VerticalBar),
+            '<' => TokenType::Symbol(Symbol::LessThan),
+            '>' => TokenType::Symbol(Symbol::GreaterThan),
+            '=' => TokenType::Symbol(Symbol::Equal),
+            '~' => TokenType::Symbol(Symbol::Tilde),
+            _ => panic!(
+                "Unknown character: {:?} at {}:{}",
+                character, self.line, self.column
+            ),
+        };
+
+        return Token::new(tk_type, self.line);
     }
 
     pub fn current_char(&self) -> char {

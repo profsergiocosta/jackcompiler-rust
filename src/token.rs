@@ -51,6 +51,7 @@ pub enum Symbol {
     Tilde,
 }
 
+
 fn symbol2char (s: &Symbol) -> char {
     match s {
         Symbol::LeftCurlyBraces => '{',
@@ -72,6 +73,31 @@ fn symbol2char (s: &Symbol) -> char {
         Symbol::GreaterThan => '>',
         Symbol::Equal => '=',
         Symbol::Tilde => '~',
+    }
+}
+
+
+fn symbol2string(s: &Symbol) -> String {
+    match s {
+        Symbol::LeftCurlyBraces => String::from("{"),
+        Symbol::RightCurlyBraces => String::from("}"),
+        Symbol::LeftParenthesis => String::from("("),
+        Symbol::RightParenthesis => String::from(")"),
+        Symbol::LeftSquareBrackets => String::from("["),
+        Symbol::RightSquareBrackets => String::from("]"),
+        Symbol::Dot => String::from("."),
+        Symbol::Comma => String::from(","),
+        Symbol::Semicolon => String::from(";"),
+        Symbol::Plus => String::from("+"),
+        Symbol::Minus => String::from("-"),
+        Symbol::Asterisk => String::from("*"),
+        Symbol::Slash => String::from("/"),
+        Symbol::Ampersand => String::from("&amp;"),
+        Symbol::VerticalBar => String::from("|"),
+        Symbol::LessThan => String::from("&lt;"),
+        Symbol::GreaterThan => String::from("&gt;"),
+        Symbol::Equal => String::from("="),
+        Symbol::Tilde => String::from("~"),
     }
 }
 
@@ -108,7 +134,7 @@ impl fmt::Display for TokenType {
             TokenType::IntegerLiteral(i) => write!(f,"<integerConstant> {} </integerConstant>",i),
             TokenType::Identifier(i) => write!(f,"<identifier> {} </identifier>",i),
             TokenType::StringLiteral(i) => write!(f,"<stringConstant> {} </stringConstant>",i),
-            TokenType::Symbol(s) => write!(f,"<symbol> {} </symbol>",symbol2char(s)),
+            TokenType::Symbol(s) => write!(f,"<symbol> {} </symbol>",symbol2string(s)),
             TokenType::TkEOF =>  write!(f,""),
         }
         

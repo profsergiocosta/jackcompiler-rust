@@ -25,6 +25,30 @@ impl Scanner {
         if self.index < length {
 
             let character = self.current_char();
+            let next_character = self.next_char();
+
+            if character == '\n' {
+                self.line += 1;
+                self.column = 1;
+            }
+
+            if character == '/' && next_character == '/' {
+                self.skip_line_comments();
+                return self.next_token();
+            }
+
+            if character == '/' && next_character == '*' {
+                self.skip_block_comments();
+                return self.next_token();
+            }
+
+        
+            if character.is_whitespace() {
+                self.index += 1;
+                self.column += 1;
+                return self.next_token();
+            }
+
 
             if character.is_numeric() {
                 return Ok(self.scan_integer_literal());
@@ -44,6 +68,49 @@ impl Scanner {
 
         }
         return Err("End of file".to_string());
+    }
+
+
+    fn skip_line_comments(&mut self) {
+        let length = self.source.chars().count();
+        let mut character = self.current_char();
+        let mut next_character = self.next_char();
+
+        while character != '\n' && self.index < length {
+             self.index += 1;
+             self.column += 1;
+
+             character = self.current_char();
+        }
+        // next line
+        self.index += 1;
+        self.line += 1;
+        self.column = 1;
+        
+    }
+
+    fn skip_block_comments(&mut self) {
+        let length = self.source.chars().count();
+        let mut character = self.current_char();
+        let mut next_character = self.next_char();
+
+        self.index += 2;
+        self.column += 2;
+
+        while !(character == '*' && next_character == '/') && self.index < length {
+                self.index += 1;
+                self.column += 1;
+                if character == '\n' {
+                    self.line += 1;
+                    self.column = 1;
+                }
+
+                character = self.current_char();
+                next_character = self.next_char();
+        }
+        // consume * and /
+        self.index += 2;
+        self.column += 2;
     }
 
 

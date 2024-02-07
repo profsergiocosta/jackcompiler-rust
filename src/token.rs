@@ -52,30 +52,6 @@ pub enum Symbol {
 }
 
 
-fn symbol2char (s: &Symbol) -> char {
-    match s {
-        Symbol::LeftCurlyBraces => '{',
-        Symbol::RightCurlyBraces => '}',
-        Symbol::LeftParenthesis => '(',
-        Symbol::RightParenthesis => ')',
-        Symbol::LeftSquareBrackets => '[',
-        Symbol::RightSquareBrackets => ']',
-        Symbol::Dot => '.',
-        Symbol::Comma => ',',
-        Symbol::Semicolon => ';',
-        Symbol::Plus => '+',
-        Symbol::Minus => '-',
-        Symbol::Asterisk => '*',
-        Symbol::Slash => '/',
-        Symbol::Ampersand => '&',
-        Symbol::VerticalBar => '|',
-        Symbol::LessThan => '<',
-        Symbol::GreaterThan => '>',
-        Symbol::Equal => '=',
-        Symbol::Tilde => '~',
-    }
-}
-
 
 fn symbol2string(s: &Symbol) -> String {
     match s {
@@ -108,7 +84,6 @@ pub enum TokenType {
     IntegerLiteral(u16),
     StringLiteral (String),
     Identifier (String),
-    TkEOF,
 }
 
 pub struct Token {
@@ -135,7 +110,6 @@ impl fmt::Display for TokenType {
             TokenType::Identifier(i) => write!(f,"<identifier> {} </identifier>",i),
             TokenType::StringLiteral(i) => write!(f,"<stringConstant> {} </stringConstant>",i),
             TokenType::Symbol(s) => write!(f,"<symbol> {} </symbol>",symbol2string(s)),
-            TokenType::TkEOF =>  write!(f,""),
         }
         
     }

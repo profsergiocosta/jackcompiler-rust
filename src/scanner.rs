@@ -74,7 +74,6 @@ impl Scanner {
     fn skip_line_comments(&mut self) {
         let length = self.source.chars().count();
         let mut character = self.current_char();
-        let mut next_character = self.next_char();
 
         while character != '\n' && self.index < length {
              self.index += 1;

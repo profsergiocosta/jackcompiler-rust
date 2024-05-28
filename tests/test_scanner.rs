@@ -120,5 +120,4 @@ fn test_square() {
     
     assert_eq!(xml_str,expected);
 }
-test_scanner
 

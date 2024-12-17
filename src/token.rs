@@ -4,7 +4,7 @@ use core::fmt;
 
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Keyword {
     Class,
     Constructor,
@@ -28,7 +28,7 @@ pub enum Keyword {
     While,
     Return,
 }
-
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Symbol {
     LeftCurlyBraces,
     RightCurlyBraces,
@@ -77,7 +77,7 @@ fn symbol2string(s: &Symbol) -> String {
     }
 }
 
-
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TokenType {
     Keyword(Keyword),
     Symbol(Symbol),
@@ -86,9 +86,10 @@ pub enum TokenType {
     Identifier (String),
 }
 
+#[derive(Debug, Clone)]
 pub struct Token {
-    token_type: TokenType,
-    line: u32,
+    pub token_type: TokenType,
+    pub line: u32,
 }
 
 impl Token {

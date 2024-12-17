@@ -17,7 +17,7 @@ impl Scanner {
             column: 1,
         }
     }
-
+/*
     pub fn next_token(&mut self) -> Result<Token, String> {
         
         let length = self.source.chars().count();
@@ -69,7 +69,57 @@ impl Scanner {
         }
         return Err("End of file".to_string());
     }
+ */
 
+
+    pub fn next_token(&mut self) -> Option<Token> {
+        let length = self.source.chars().count();
+
+        while self.index < length {
+            let character = self.current_char();
+            let next_character = self.next_char();
+
+            if character == '\n' {
+                self.line += 1;
+                self.column = 1;
+            }
+
+            if character == '/' && next_character == '/' {
+                self.skip_line_comments();
+                continue; // Ignora comentário e busca o próximo token
+            }
+
+            if character == '/' && next_character == '*' {
+                self.skip_block_comments();
+                continue; // Ignora comentário e busca o próximo token
+            }
+
+            if character.is_whitespace() {
+                self.index += 1;
+                self.column += 1;
+                continue; // Ignora espaços em branco e busca o próximo token
+            }
+
+            if character.is_numeric() {
+                return Some(self.scan_integer_literal());
+            }
+
+            if character.is_alphanumeric() {
+                return Some(self.scan_identifier_or_keyword());
+            }
+
+            if character == '"' {
+                self.index += 1;
+                self.column += 1;
+                return Some(self.scan_string_literal());
+            }
+
+            return Some(self.scan_symbol());
+        }
+
+        // Retorna None ao atingir o fim do arquivo
+        None
+    }
 
     fn skip_line_comments(&mut self) {
         let length = self.source.chars().count();

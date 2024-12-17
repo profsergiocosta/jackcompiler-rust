@@ -25,12 +25,17 @@ pub struct Parser {
 
 impl Parser {
     pub fn new(source_code: String) -> Parser {
-        Parser {
+        let mut parser = Self  {
             scanner: Scanner::new(source_code),
             vmwriter: VMWriter::new(),
             current_token: None,
             peek_token: None,
-        }
+        };
+
+        parser.next_token();
+
+        parser
+
     }
 
     pub fn next_token(&mut self) {
@@ -45,6 +50,7 @@ impl Parser {
             Some(token) => match token.token_type {
                 TokenType::IntegerLiteral(i)   => {
                     self.expect_peek(TokenType::IntegerLiteral(i));
+                    self.vmwriter.write_push(Segment::Const, i);
                     Ok(())
                 }
                 _ => Err(self.error(token, "term expected")),
@@ -52,6 +58,22 @@ impl Parser {
             None => Err("Unexpected end of input: term expected".to_string()),
         }
     }
+    
+    /*
+    pub fn parse_term(&mut self) -> Result<(), String> {
+        match self.peek_token.as_ref() {
+            Some(token) => match token.token_type {
+                TokenType::IntegerLiteral(i)   => {
+                    self.expect_peek(TokenType::IntegerLiteral(i));
+                    self.vmwriter.write_push(Segment::Const, i);
+                    Ok(())
+                }
+                _ => Err(self.error(token, "term expected")),
+            },
+            None => Err("Unexpected end of input: term expected".to_string()),
+        }
+    }
+     */
 
     /* 
     pub fn parse_term(&mut self) {
@@ -106,7 +128,7 @@ impl Parser {
             //if token.token_type == TokenType::EOF {
               //  self.report(token.line, " at end", message)
 //            } else {
-                self.report(token.line, &format!(" at '{}'", token.lexeme), message)
+                self.report(token.line, &format!(" at '{}'", token), message)
            // }
         }
     
@@ -118,3 +140,5 @@ impl Parser {
         }
 
 }
+
+

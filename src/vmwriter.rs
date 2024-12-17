@@ -53,7 +53,7 @@ impl VMWriter {
         &self.vm_output
     }
 
-    pub fn write_push(&mut self, segment: Segment, index: usize) {
+    pub fn write_push(&mut self, segment: Segment, index: u16) {
         self.vm_output
             .push_str(&format!("push {} {}\n", segment.as_str(), index));
     }

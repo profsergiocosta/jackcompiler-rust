@@ -49,7 +49,7 @@ impl Parser {
         match self.peek_token.as_ref() {
             Some(token) => match token.token_type {
                 TokenType::IntegerLiteral(i)   => {
-                    self.expect_peek(TokenType::IntegerLiteral(i));
+                    self.next_token(); // Avança para o próximo token
                     self.vmwriter.write_push(Segment::Const, i);
                     Ok(())
                 }
@@ -59,49 +59,13 @@ impl Parser {
         }
     }
     
-    /*
-    pub fn parse_term(&mut self) -> Result<(), String> {
-        match self.peek_token.as_ref() {
-            Some(token) => match token.token_type {
-                TokenType::IntegerLiteral(i)   => {
-                    self.expect_peek(TokenType::IntegerLiteral(i));
-                    self.vmwriter.write_push(Segment::Const, i);
-                    Ok(())
-                }
-                _ => Err(self.error(token, "term expected")),
-            },
-            None => Err("Unexpected end of input: term expected".to_string()),
-        }
-    }
-     */
 
-    /* 
-    pub fn parse_term(&mut self) {
-        self.vmwriter.write_push(Segment::Const, 10);
-    }
-    */
 
     pub fn vm_output(&self) -> &str {
         &self.vmwriter.vm_output()
     }
 
-    /*
-        /// Verifica se `peek_token` corresponde a qualquer um dos tipos fornecidos.
-        fn expect_peek_multiple(&mut self, types: &[TokenType]) -> Result<(), String> {
-            for &token_type in types {
-                if let Some(peek) = &self.peek_token {
-                    if peek.token_type == token_type {
-                        return self.expect_peek(token_type); // Chamando `expect_peek` diretamente
-                    }
-                }
-            }
-    
-            // Gera um erro se nenhum tipo corresponder
-            let peek = self.peek_token.clone().unwrap_or(Token::eof());
-            Err(self.error(&peek, "Expected a statement"))
-        }
 
-         */
     
          fn expect_peek(&mut self, expected_type: TokenType) -> Result<(), String> {
             match self.peek_token.as_ref() {
@@ -123,13 +87,7 @@ impl Parser {
         /// Gera um erro formatado.
         fn error(&self, token: &Token, message: &str) -> String {
 
-            
-
-            //if token.token_type == TokenType::EOF {
-              //  self.report(token.line, " at end", message)
-//            } else {
-                self.report(token.line, &format!(" at '{}'", token), message)
-           // }
+               self.report(token.line, &format!(" at '{}'", token), message)
         }
     
         /// Reporta um erro no formato desejado.
